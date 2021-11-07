@@ -1,0 +1,32 @@
+{
+  "name": "u-develop-it",
+  "version": "1.0.0",
+  "description": "**Title:**\r   Create a database that contains the candidates table",
+  "main": "inputCheck.test.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node server.js",
+    "demon": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rakky21/u-develop-it.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rakky21/u-develop-it/issues"
+  },
+  "homepage": "https://github.com/rakky21/u-develop-it#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.2",
+    "nodemon": "^2.0.14"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.14"
+  }
+}
