@@ -2,13 +2,6 @@ const inquirer = require('inquirer');
 const fs = require('fs')
 const db = require('./db/connection.js');
 
-// const generateMarkdown = require('./ut/generateMarkdown')
-// const writeEmployeeqs = require('./utils/writeEmployeeqs.js')
-
-// THEN I am presented with the following options:
-//  view all departments, view all roles, view all employees, 
-//  add a department, add a role, add an employee, and update an employee role
-
 const questions = [
     {
         type: 'list',
@@ -16,29 +9,9 @@ const questions = [
         name: 'option',
         choices: ['View all departments', 'View all roles', 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role', 'Quit']
     }
-    //     {
-    //         type: 'choices',
-    //         message: "view all departments",
-    //         choices: ['Sales', 'Engineering', 'Finance', 'Legal']
-    //     },
-    //     {
-    //         type: 'choices',
-    //         message: 'view all roles',
-    //         choices: ['Sales Lead', 'Salesperson', 'Lead Engineer', ' Software Engineer', 'Accountant', 'Legal Team Lead', 'Lawyer', 'Software Engineer']
-    //     },
-    //     {
-    //         type: 'input',
-    //         message: 'Add employee',
-    //         choices: ['']
-    //     },
-    //     {
-    //         type: 'input',
-    //         message: 'Add department',
-    //         choices: ['']
-    //     }
 ];
 
-// 'View all employees', 'Add a department', 'Add a role', 'Add an employee', 'Update an employee role'
+// questions
 function init() {
     inquirer
         .prompt(questions)
@@ -56,7 +29,18 @@ function init() {
             else if (answers.option === 'Add an employee') {
                 addEmployee()
             }
-
+            else if (answers.option === 'Add a role') {
+                addRole()
+            }
+            else if (answers.option === 'Add a department') {
+                addDepartment()
+            }
+            else if (answers.option === 'Update an employee role') {
+                updateEmployee()
+            }
+            else if (answers.option === 'Quit') {
+                quit()
+            }
         })
         .catch((error) => {
             if (error.isTtyError) {
@@ -66,10 +50,9 @@ function init() {
             }
         });
 }
-
 init();
 
-// selects the data
+// selects the data to view all departs.
 function viewallDepartments() {
     const sql = `SELECT * FROM departments`;
     db.query(sql, (err, rows) => {
@@ -82,6 +65,7 @@ function viewallDepartments() {
     });
 }
 
+// roles
 function viewRoles() {
     const sql = `SELECT * FROM roles`;
     db.query(sql, (err, rows) => {
@@ -94,6 +78,7 @@ function viewRoles() {
     });
 }
 
+// emp list
 function viewEmployees() {
     const sql = `SELECT * FROM employees`;
     db.query(sql, (err, rows) => {
@@ -106,6 +91,7 @@ function viewEmployees() {
     });
 }
 
+// add employee
 const empQs = [
     {
         type: 'input',
@@ -128,29 +114,120 @@ const empQs = [
         name: 'managers_id'
     }
 ];
-
 function addEmployee() {
     inquirer
         .prompt(empQs).then(body => {
-            const sql = `INSERT INTO employees (id, first_name, last_name, roles_id, managers_id)
+            const sql = `INSERT INTO employees (first_name, last_name, roles_id, managers_id)
             VALUES (?,?,?,?)`;
-                const params = [
-                    body.first_name,
-                    body.last_name,
-                    body.roles_id,
-                    body.managers_id
-                ];
-                db.query(sql, params, (err, rows) => {
-                    if (err) {
-                        console.log(err)
-                        return;
-                    }
-                    console.table(rows)
-                    init();
-                });
+            const params = [
+                body.first_name,
+                body.last_name,
+                body.roles_id,
+                body.managers_id
+            ];
+            db.query(sql, params, (err, rows) => {
+                if (err) {
+                    console.log(err)
+                    return;
+                }
+                console.table(rows)
+                init();
+            });
         })
 }
 
+// add dep
+const depQs = [
+    {
+        type: 'input',
+        message: 'What is the departments name?',
+        name: 'department_name'
+    }];
+function addDepartment() {
+    inquirer
+        .prompt(depQs).then(body => {
+            const sql = `INSERT INTO departments (department_name)
+VALUES (?)`;
+            const params = [
+                body.department_name
+            ];
+            db.query(sql, params, (err, rows) => {
+                if (err) {
+                    console.log(err)
+                    return;
+                }
+                console.table(rows)
+                init();
+            });
+        })
+}
+
+// add role
+const roleQs = [
+    {
+        type: 'input',
+        message: 'What is the title name?',
+        name: 'title'
+    },
+    {
+        type: 'input',
+        message: 'What is this positions salary?',
+        name: 'salary'
+    },
+    {
+        type: 'input',
+        message: 'What department it belongs to?',
+        name: 'department_id'
+    }
+];
+function addRole() {
+    inquirer
+        .prompt(roleQs).then(body => {
+            const sql = `INSERT INTO roles (title, salary)
+            VALUES (?,?)`;
+            const params = [
+                body.title,
+                body.salary,
+                body.department_id
+            ];
+            db.query(sql, params, (err, rows) => {
+                if (err) {
+                    console.log(err)
+                    return;
+                }
+                console.table(rows)
+                init();
+            });
+        })
+}
+
+// update role
+const updateQs = [
+    {
+        type: 'choices',
+        message: 'Select ID of employee you wish to update?',
+        name: 'employees_id'
+    },
+    {
+        type: 'choices',
+        message: 'Select new title?',
+        name: 'roles_id'
+    }];
+function updateEmployee() {
+    inquirer
+        .prompt(updateQs).then(body => {
+            const sql = `UPDATE employee SET role = ? WHERE id = ?`;
+            const params = [req.body.roles_id, req.params.id];
+            db.query(sql, params, (err, rows) => {
+                if (err) {
+                    console.log(err)
+                    return;
+                }
+                console.table(rows)
+                init();
+            });
+        })
+}
 
 function quit() {
     db.end()
