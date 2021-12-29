@@ -3,22 +3,15 @@
 # employeetrack Starter Code
 
 ## Description
-In this site, you will be able to add as many note as you would like and delete them as needed.
-The application can be reached at:
+On the Employeetrack app, you will be able to add employees data to the system and will be able to updated in the future. 
 
 https://rakky21.github.io/noteTaker/
 https://github.com/rakky21/noteTaker
 
-## Usage
-1. When you click on "Get Started" it prompts you to the note taking section.
-2. Enter a title and a note on the text.
-3. Once you're done with the note you can save it.
-4. When you click on the title of the note on the left you will see the comment.
-5. When you click on the Trash Icon, it will delete that note.
+https://watch.screencastify.com/v/GTxc3juSvUbS0ULCuAx2
 
 ## Snapshots
-![Deleted notes](public/assets/deletenotes.jpg) 
-![Added notes](public/assets/addednotes.jpg) 
+![Charts](utils/displayingdata.jpg)
 
 ## Instructions 
 GIVEN a command-line application that accepts user input
